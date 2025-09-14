@@ -4,6 +4,9 @@ Este é uma simples API de livros
 
 ---
 
+## Workflow escolhido:
+O workflow escolhido foi o Github flow, por se tratar de um workflow de branching simples, leve e que funciona bem para projetos que não tem necessidade de vários ambientes de release. Por se tratar de uma API de livros simples, o Github flow atende bem a necessidade.
+
 ## Como rodar o projeto:
 
 1. **Clone o repositório**
@@ -39,4 +42,28 @@ mongodb://127.0.0.1:27017/Livros
 
 ```bash
 npm start
+```
+
+## Rotas da API:
+
+---
+### 🔍 Listar todos os livros:
+- **Método:** `GET`
+- **Endpoint:** `http://127.0.0.1:3000/livros/all`
+
+### ➕ Cadastrar um livro:
+- **Método:** `POST`
+- **Endpoint:** `http://127.0.0.1:3000/livros`
+- **Exemplo de JSON para realizar o cadastro:**
+```json
+{
+    "title":"Frankenstein",
+    "author":"Mary Shelley",
+    "publishedYear":"1818",
+    "genre":"Ficção científica, Ficção gótica, Terror,",
+    "isbn":"8594540183",
+    "description":"Frankenstein, o romance gótico de Mary Shelley, narra a história do jovem Victor Frankenstein, um cientista que, movido pela ambição, dá vida a uma criatura grotesca a partir de restos mortais.",
+    "language":"pt-BR",
+    "publishe":"Darkside"
+}
 ```
