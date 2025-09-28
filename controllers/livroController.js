@@ -19,11 +19,11 @@ const livroController = {
 
     readAll: async (req, res) => {
         try {
-        const results = await Livro.find({});
+            const results = await Livro.find({});
         res.status(200).json(results);
         } catch (error) {
-        console.error("Erro ao buscar livros:", error);
-        res.status(500).json({ error: "Erro interno do servidor" });
+            console.error("Erro ao buscar livros:", error);
+            res.status(500).json({ error: "Erro interno do servidor" });
         }
     }
 };
