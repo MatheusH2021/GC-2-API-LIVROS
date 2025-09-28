@@ -1,25 +1,31 @@
-const {Livro: LivroModel, Livro} = require("../models/Livro");
+const { Livro } = require("../models/Livro");
 
 const livroController = {
-    create: async(req, res)=> {
+    create: async (req, res) => {
         const livro = req.body;
-        if (livro.title == "") {
+        if (!livro.title) {
             return res.status(400).json({ error: "informe o campo obrigatorio: Title." });
-        } else if (livro.author == "") {
+        }
+        if (!livro.author) {
             return res.status(400).json({ error: "informe o campo obrigatorio: Author." });
-        } else if (await LivroModel.findOne( { isbn: livro.isbn })) {
+        }
+        if (await Livro.findOne({ isbn: livro.isbn })) {
             return res.status(400).json({ error: "ISBN já cadastrado." });
         }
 
-        const response = await LivroModel.create(livro);
-        res.status(201).json({response, msg:"Livro cadastrado!"});
-
+        const response = await Livro.create(livro);
+        res.status(201).json({ response, msg: "Livro cadastrado!" });
     },
 
-    readAll: async(req, res)=> {
-        let results = await LivroModel.find({});
-        res.send(results).status(200);
+  readAll: async (req, res) => {
+    try {
+      const results = await Livro.find({});
+      res.status(200).json(results);
+    } catch (error) {
+      console.error("Erro ao buscar livros:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
     }
-}
+  }
+};
 
-module.exports = livroController
+module.exports = livroController;
