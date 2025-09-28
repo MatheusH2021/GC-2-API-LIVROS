@@ -1,0 +1,23 @@
+name: Workflow para Commits
+run-name: Workflow para commits sedo executado
+on: 
+  push:
+    branches:
+      - main
+jobs:
+  executa-acoes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Realiza clone do repositorio e muda para a branch correta
+        uses: actions/checkout@v5
+
+      - name: Instalar o node na versão 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar as dependencias de execução
+        run: npm install
+
+      - name: Executa testes nas rotas definidas
+        run: npm test      

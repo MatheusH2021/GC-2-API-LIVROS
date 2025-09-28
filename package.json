@@ -4,7 +4,7 @@
   "description": "Api de livros",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start": "node src/app.js"
   },
   "keywords": [
@@ -17,6 +17,8 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "mongoose": "^8.18.1"
+    "jest": "^30.2.0",
+    "mongoose": "^8.18.1",
+    "supertest": "^7.1.4"
   }
 }
