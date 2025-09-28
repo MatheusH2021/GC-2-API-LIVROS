@@ -17,15 +17,15 @@ const livroController = {
         res.status(201).json({ response, msg: "Livro cadastrado!" });
     },
 
-  readAll: async (req, res) => {
-    try {
-      const results = await Livro.find({});
-      res.status(200).json(results);
-    } catch (error) {
-      console.error("Erro ao buscar livros:", error);
-      res.status(500).json({ error: "Erro interno do servidor" });
+    readAll: async (req, res) => {
+        try {
+            const results = await Livro.find({});
+        res.status(200).json(results);
+        } catch (error) {
+            console.error("Erro ao buscar livros:", error);
+            res.status(500).json({ error: "Erro interno do servidor" });
+        }
     }
-  }
 };
 
 module.exports = livroController;
