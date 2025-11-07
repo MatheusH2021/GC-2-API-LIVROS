@@ -30,26 +30,28 @@ const livroController = {
 
   delete: async (req, res) => {
     try {
-      const { id } = req.params;
+      const { id } = req.params
 
       if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ message: "ID do livro inválido" });
+        return res.status(400).json({ message: 'ID do livro inválido' })
       }
 
-      const livroDeletado = await Livro.findByIdAndDelete(id);
+      const livro = await Livro.findOne({ _id: id })
 
-      if (!livroDeletado) {
-        return res.status(404).json({ message: "Livro não encontrado" });
+      if (!livro) {
+        return res.status(404).json({ message: 'Livro não encontrado' })
       }
 
-      return res.sendStatus(204);
+      await Livro.deleteOne( { _id : id })
+
+      return res.status(204).send()
     } catch (error) {
-      console.error(`[DELETE /livros/${req.params.id}]`, error);
+      console.error(`[DELETE /livros/${req.params.id}]`, error)
       return res.status(500).json({
-        message: "Erro interno ao deletar livro",
-      });
+        message: 'Erro interno ao deletar livro'
+      })
     }
-  },
+  }
 
 }
 
