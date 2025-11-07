@@ -67,3 +67,7 @@ npm start
     "publishe":"Darkside"
 }
 ```
+
+### ➕ Deletar um livro:
+- **Método:** `DELETE`
+- **Endpoint:** `http://127.0.0.1:3000/livros/:id-livro`

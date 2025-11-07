@@ -7,10 +7,11 @@ jest.mock('./models/Livro', () => {
   const find = jest.fn()
   const create = jest.fn()
   const findOne = jest.fn()
+  const deleteOne = jest.fn()
 
   return {
-    Livro: { find, create, findOne },
-    LivroModel: { find, create, findOne }
+    Livro: { find, create, findOne, deleteOne },
+    LivroModel: { find, create, findOne, deleteOne }
   }
 })
 
@@ -169,6 +170,57 @@ describe('Testes de rotas da API de Livros', () => {
     expect(response.statusCode).toBe(400)
     expect(response.body.error).toMatch(/informe o campo obrigatorio: Author./)
 
+  })
+
+  it('Deve deletar um livro com sucesso (status 204)', async () => {
+    const idValido = '690d528a5d6df61c37cf2ba0'
+
+    LivroModel.findOne.mockResolvedValue({
+      _id: idValido,
+      title: 'Frankeinstein'
+    })
+
+    LivroModel.deleteOne.mockResolvedValue({ deletedCount: 1 })
+
+    const app = getApp()
+    const response = await request(app).delete(`/api/livros/${idValido}`)
+
+    expect(response.statusCode).toBe(204)
+  })
+
+  it('Deve retornar 404 se o livro não for encontrado', async () => {
+    LivroModel.findOne.mockResolvedValue(null)
+
+    const app = getApp()
+    const response = await request(app).delete('/api/livros/68c704f2241e0157b6a8b15c')
+
+    expect(response.statusCode).toBe(404)
+    expect(response.body).toHaveProperty('message', 'Livro não encontrado')
+  })
+
+  it('Deve retornar 400 se o ID for inválido', async () => {
+    const app = getApp()
+    const response = await request(app).delete('/api/livros/id-invalido')
+
+    expect(response.statusCode).toBe(400)
+    expect(response.body).toHaveProperty('message', 'ID do livro inválido')
+  })
+
+  it('Deve retornar 500 se ocorrer um erro interno ao deletar o livro', async () => {
+    const idValido = '68c704f2241e0157b6a8b11c'
+
+    LivroModel.findOne.mockResolvedValue({
+      _id: idValido,
+      title: 'Frankenstein'
+    })
+
+    LivroModel.deleteOne.mockRejectedValue(new Error('Erro simulado no banco'))
+
+    const app = getApp()
+    const response = await request(app).delete(`/api/livros/${idValido}`)
+
+    expect(response.statusCode).toBe(500)
+    expect(response.body).toHaveProperty('message', 'Erro interno ao deletar livro')
   })
 
 })
