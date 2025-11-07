@@ -1,4 +1,5 @@
 const { Livro } = require('../models/Livro')
+const { mongoose } = require('mongoose')
 
 const livroController = {
   create: async (req, res) => {
@@ -25,7 +26,31 @@ const livroController = {
       console.error('Erro ao buscar livros:', error)
       res.status(500).json({ error: 'Erro interno do servidor' })
     }
-  }
+  },
+
+  delete: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "ID do livro inválido" });
+      }
+
+      const livroDeletado = await Livro.findByIdAndDelete(id);
+
+      if (!livroDeletado) {
+        return res.status(404).json({ message: "Livro não encontrado" });
+      }
+
+      return res.sendStatus(204);
+    } catch (error) {
+      console.error(`[DELETE /livros/${req.params.id}]`, error);
+      return res.status(500).json({
+        message: "Erro interno ao deletar livro",
+      });
+    }
+  },
+
 }
 
 module.exports = livroController
