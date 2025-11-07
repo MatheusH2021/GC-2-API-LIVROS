@@ -207,20 +207,20 @@ describe('Testes de rotas da API de Livros', () => {
   })
 
   it('Deve retornar 500 se ocorrer um erro interno ao deletar o livro', async () => {
-    const idValido = '68c704f2241e0157b6a8b11c';
+    const idValido = '68c704f2241e0157b6a8b11c'
 
-    LivroModel.findOne.mockResolvedValue({ 
-      _id: idValido, 
-      title: 'Frankenstein' 
-    });
+    LivroModel.findOne.mockResolvedValue({
+      _id: idValido,
+      title: 'Frankenstein'
+    })
 
-    LivroModel.deleteOne.mockRejectedValue(new Error('Erro simulado no banco'));
+    LivroModel.deleteOne.mockRejectedValue(new Error('Erro simulado no banco'))
 
-    const app = getApp();
-    const response = await request(app).delete(`/api/livros/${idValido}`);
+    const app = getApp()
+    const response = await request(app).delete(`/api/livros/${idValido}`)
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('message', 'Erro interno ao deletar livro');
-  });
+    expect(response.statusCode).toBe(500)
+    expect(response.body).toHaveProperty('message', 'Erro interno ao deletar livro')
+  })
 
 })
