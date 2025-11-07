@@ -3,3 +3,6 @@ node_modules/
 
 # Variáveis de ambiente
 .env
+
+# Pasta de coverage
+coverage/
