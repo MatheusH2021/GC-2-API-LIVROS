@@ -4,6 +4,15 @@ Este é uma simples API de livros
 
 ---
 
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-gc--2--api--livros-blue)](https://hub.docker.com/r/mathdocker227/gc-2-api-livros)
+![Docker Version](https://img.shields.io/docker/v/mathdocker227/gc-2-api-livros?sort=semver)
+![Docker Size](https://img.shields.io/docker/image-size/mathdocker227/gc-2-api-livros/latest)
+![Docker Pulls](https://img.shields.io/docker/pulls/mathdocker227/gc-2-api-livros)
+![Node.js](https://img.shields.io/badge/Node.js-20.x-green)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen)
+
+---
+
 ## Workflow escolhido:
 O workflow escolhido foi o Github flow, por se tratar de um workflow de branching simples, leve e que funciona bem para projetos que não tem necessidade de vários ambientes de release. Por se tratar de uma API de livros simples, o Github flow atende bem a necessidade.
 
