@@ -1,0 +1,86 @@
+- name: Testar API-LIVROS Ansible
+  hosts: servidores
+  become: yes
+
+  vars:
+    api_image: mathdocker227/gc-2-api-livros:latest
+    api_container: api-livros
+    mongo_container: mongodb
+    api_port: 3000
+    mongo_port: 27017
+    db_name: livros
+    docker_network: api_network
+
+  tasks:
+
+    - name: Atualiza pacote e instala dependencias do docker_network
+      apt: 
+        name:
+          - docker.io
+        state: present
+        update_cache: yes
+
+    - name: Garantir que o docker esta ativo
+      service:
+        name: docker
+        state: present  
+        enable: yes
+    
+    - name: Criar rede docker para comunicação entre API e Mongo
+      docker_network: 
+        name: "{{ docker_network }}"
+        state: present
+      
+    - name: Remove MongoDB antigo
+      docker_container:
+        name: "{{ mongo_container }}"
+        state: absent
+        force_kill: yes
+      ignore_errors: yes
+
+    - name: Subir container MongoDB
+      docker_container: 
+        name: "{{ mongo_container }}"
+        image: "mongo:latest"
+        state: started
+        restart_policy: always
+        networks:
+          - name: "{{ docker_network }}"
+        published_ports:
+          - "{{ mongo_port }}:27017"
+
+    - name: Remove API antiga
+      docker_container:
+        name: "{{ api_container }}"
+        state: absent
+        force_kill: yes
+      ignore_errors: yes
+
+    - name: Subir API-LIVROS usando imagem do docker hub
+      docker_container:
+        name: "{{ api_container }}"
+        image: "{{ api_image }}"
+        state: started
+        restart_policy: always
+        networks:
+          - name: "{{ docker_network }}"
+        published_ports:
+          - "{{ api_port }}:3000"
+        env:
+          -PORT: "3000"
+          -MONGO_URI: "mongodb://{{ mongo_container }}:27017/{{ db_name }}"
+
+    - name: Aguarda API Subir
+      pause: 
+        seconds: 8
+
+    - name: Testar endpoint /api/livros/all
+      uri:
+        url: "http://localhost:3000/api/livros/all"
+        method: GET
+        return_content: yes
+      register: api_response
+
+    - name: Mostrar resultado API
+      debug:
+        var: api_response.content
